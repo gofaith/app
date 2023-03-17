@@ -12,7 +12,8 @@ type Window struct {
 	width, height int
 	hint          webview.Hint
 	w             webview.WebView
-	children      []Widget
+	head          []Widget
+	body          []Widget
 	binders       []binder
 }
 
@@ -34,7 +35,6 @@ func (w *Window) Debug(debug bool) *Window {
 	w.debug = debug
 	return w
 }
-
 func (w *Window) IsRunning() bool {
 	return w.w != nil
 }
@@ -49,15 +49,25 @@ func (w *Window) addBinder(key string, value interface{}) {
 }
 
 func (w *Window) Run() {
+	//compose with bootstrap
+	doc := html().Head(
+		Head(
+			append(w.head, Style(_bootstrapCSS))...,
+		),
+	).Body(
+		Body(append(w.body, Script().Text(_bootstrapJS))...),
+	)
+
+	// webview
 	w.w = webview.New(w.debug)
 	w.w.SetSize(w.width, w.height, w.hint)
 	w.w.SetTitle(w.title)
 
 	//render
 	buf := new(strings.Builder)
-	for _, v := range w.children {
-		buf.WriteString(v.Render())
-	}
+	buf.WriteString("<!DOCTYPE html>")
+	buf.WriteString(doc.Render())
+
 	w.w.SetHtml(buf.String())
 
 	//bind
@@ -103,8 +113,11 @@ func (w *Window) Assign(v **Window) *Window {
 	*v = w
 	return w
 }
-
+func (w *Window) Head(widgets ...Widget) *Window {
+	w.head = widgets
+	return w
+}
 func (w *Window) Body(widgets ...Widget) *Window {
-	w.children = widgets
+	w.body = widgets
 	return w
 }

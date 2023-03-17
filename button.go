@@ -13,6 +13,12 @@ func Button() *ButtonWidget {
 func (b *ButtonWidget) OnClick(fn func()) *ButtonWidget {
 	id := GenerateID()
 	instance.addBinder(id, fn)
-	b.addAttr("onclick", id+"()")
+	b.AddAttr("onclick", id+"()")
 	return b
+}
+
+func PrimaryButton() *ButtonWidget {
+	v := Button()
+	v.AddClass("btn").AddClass("btn-primary")
+	return v
 }

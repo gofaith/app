@@ -6,12 +6,12 @@ import (
 )
 
 type Element struct {
-	name     string
-	class    []string
-	style    []attr
-	attrs    []attr
-	children []Widget
-	nobody   bool // 没有body的元素，如<input>
+	name      string
+	class     []string
+	style     []attr
+	attrs     []attr
+	children  []Widget
+	enclosure bool // 没有body的元素，如<input>
 }
 
 type attr struct {
@@ -57,7 +57,7 @@ func (e *Element) Render() string {
 
 	buf.WriteString(">")
 
-	if !e.nobody {
+	if !e.enclosure {
 		//body
 		for _, v := range e.children {
 			buf.WriteString(v.Render())
@@ -105,60 +105,63 @@ func (e *Element) Body(widgets ...Widget) *Element {
 	return e
 }
 
-func (e *Element) addStyle(key, value string) {
+func (e *Element) AddStyle(key, value string) *Element {
 	for i, v := range e.style {
 		if v.key == key {
 			e.style[i].value = value
-			return
+			return e
 		}
 	}
 	e.style = append(e.style, attr{key: key, value: value})
+	return e
 }
 
-func (e *Element) addClass(classname string) {
+func (e *Element) AddClass(classname string) *Element {
 	for _, v := range e.class {
 		if v == classname {
-			return
+			return e
 		}
 	}
 	e.class = append(e.class, classname)
+	return e
 }
 
-func (e *Element) addAttr(key, value string) {
+func (e *Element) AddAttr(key, value string) *Element {
 	for i, v := range e.attrs {
 		if v.key == key {
 			e.attrs[i].value = value
-			return
+			return e
 		}
 	}
 	e.attrs = append(e.attrs, attr{key: key, value: value})
+	return e
 }
 
 func (e *Element) Column() *Element {
-	e.addStyle("display", "flex")
-	e.addStyle("flex-direction", "column")
+	e.AddStyle("display", "flex")
+	e.AddStyle("flex-direction", "column")
 	return e
 }
 func (e *Element) ColumnCenter() *Element {
-	e.addStyle("align-items", "center")
+	e.AddStyle("align-items", "center")
 	return e.Column()
 }
 
 func (e *Element) WideColumn() *Element {
-	e.addStyle("width", "100%")
+	e.AddStyle("width", "100%")
 	return e.Column()
 }
 func (e *Element) MaxWidthPixel(width int) *Element {
-	e.addStyle("max-width", fmt.Sprintf("%dpx", width))
+	e.AddStyle("max-width", fmt.Sprintf("%dpx", width))
 	return e
 }
 func (e *Element) Row() *Element {
-	e.addStyle("display", "flex")
-	e.addStyle("flex-direction", "row")
+	e.AddStyle("display", "flex")
+	e.AddStyle("flex-direction", "row")
 	return e
 }
 func (e *Element) RowCenter() *Element {
-	e.addStyle("align-items", "center")
+	e.AddStyle("align-items", "center")
 	return e.Row()
 }
 
@@ -169,7 +172,7 @@ func (e *Element) GetID() string {
 		}
 	}
 	id := GenerateID()
-	e.addAttr("id", id)
+	e.AddAttr("id", id)
 	return id
 }
 

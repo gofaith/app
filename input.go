@@ -7,8 +7,8 @@ type InputWidget struct {
 func Input() *InputWidget {
 	v := &InputWidget{}
 	v.name = "input"
-	v.nobody = true
-	v.addAttr("type", "text")
+	v.enclosure = true
+	v.AddAttr("type", "text")
 	return v
 }
 
@@ -22,7 +22,7 @@ func (i *InputWidget) Assign(v **InputWidget) *InputWidget {
 }
 
 func (i *InputWidget) TypeFile() *InputWidget {
-	i.addAttr("type", "file")
+	i.AddAttr("type", "file")
 	return i
 }
 
@@ -31,7 +31,7 @@ func (i *InputWidget) Value(s string) *InputWidget {
 		instance.w.Eval(i.evalGetElementById() + ".value=" + quoteString(s))
 		return i
 	}
-	i.addAttr("value", s)
+	i.AddAttr("value", s)
 	return i
 }
 
@@ -53,7 +53,7 @@ func (i *InputWidget) OnChange(fn func(s string)) *InputWidget {
 
 	value = GenerateID()
 	instance.addBinder(value, fn)
-	i.addAttr("onchange", value+"(this.value)")
+	i.AddAttr("onchange", value+"(this.value)")
 	return i
 }
 
@@ -64,7 +64,7 @@ func (i *InputWidget) OnKeyUp(fn func(keyCode string)) *InputWidget {
 		for idx, v := range instance.binders {
 			if v.key == value {
 				instance.binders[idx].value = func(s string, code string) {
-					i.addAttr("value", s)
+					i.AddAttr("value", s)
 					if fn != nil {
 						fn(code)
 					}
@@ -75,11 +75,11 @@ func (i *InputWidget) OnKeyUp(fn func(keyCode string)) *InputWidget {
 	}
 	value = GenerateID()
 	instance.addBinder(value, func(s string, code string) {
-		i.addAttr("value", s)
+		i.AddAttr("value", s)
 		if fn != nil {
 			fn(code)
 		}
 	})
-	i.addAttr("onkeyup", value+"(this.value,event.code)")
+	i.AddAttr("onkeyup", value+"(this.value,event.code)")
 	return i
 }

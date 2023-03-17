@@ -1,6 +1,8 @@
 package app
 
 import (
+	_ "embed"
+	"fmt"
 	"math/rand"
 	"sync"
 	"time"
@@ -10,6 +12,12 @@ type binder struct {
 	key   string
 	value interface{}
 }
+
+//go:embed bootstrap.min.js
+var _bootstrapJS string
+
+//go:embed bootstrap.min.css
+var _bootstrapCSS string
 
 var (
 	idmap    = make(map[string]struct{})
@@ -21,6 +29,7 @@ var letterRunes = []rune("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
+	fmt.Println("bootstrap:", len(_bootstrapCSS))
 }
 
 func RandomString(n int) string {
