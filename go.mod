@@ -1,4 +1,4 @@
-module github.com/StevenZack/app
+module github.com/gofaith/app
 
 go 1.20
 
