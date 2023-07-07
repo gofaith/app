@@ -1,2 +1,8 @@
-github.com/webview/webview v0.0.0-20230210061304-7b40e46d97e9 h1:SPyWnfToUom3xNh3dKGkq1ZV7pw+VSWDcfVrUM1nRWs=
-github.com/webview/webview v0.0.0-20230210061304-7b40e46d97e9/go.mod h1:rpXAuuHgyEJb6kXcXldlkOjU6y4x+YcASKKXJNUhh0Y=
+github.com/StevenZack/openurl v0.0.0-20190430065139-b25363f65ff8 h1:aaBpb+Ig4NNrG4omEUvLdgeizvwTOLGek0BZuuULYYI=
+github.com/StevenZack/openurl v0.0.0-20190430065139-b25363f65ff8/go.mod h1:tGSuG3wQ/DMizcSjaESj69o1TvmVrYuI6NLlF7Dp8iI=
+github.com/StevenZack/tools v1.14.1 h1:+LqvdAImCL2PxMn2rM2jyv2WEUjILCL5ZHtVsCmuSxw=
+github.com/StevenZack/tools v1.14.1/go.mod h1:aQAq46MqU7ACOiDOqC2HQtgs9d4y6nwl13OwojvzWYs=
+github.com/gorilla/websocket v1.5.0 h1:PPwGk2jz7EePpoHN/+ClbZu8SPxiqlu12wZP/3sWmnc=
+github.com/gorilla/websocket v1.5.0/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
+golang.org/x/text v0.3.5/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
+golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=

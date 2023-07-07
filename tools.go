@@ -3,7 +3,10 @@ package app
 import (
 	"bytes"
 	"errors"
+	"fmt"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 func quoteString(s string) string {
@@ -104,4 +107,25 @@ func subBetween(s string, start, end rune) (string, error) {
 		}
 	}
 	return "", errors.New("no end " + string(end))
+}
+
+var letterRunes = []rune("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func init() {
+	rand.Seed(time.Now().UnixNano())
+	fmt.Println("bootstrap:", len(_bootstrapCSS))
+}
+
+func randomString(n int) string {
+	if n < 1 {
+		return ""
+	}
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	if b[0] >= '0' && b[0] <= '9' {
+		return "a" + string(b)
+	}
+	return string(b)
 }

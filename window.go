@@ -3,18 +3,17 @@ package app
 import (
 	"strings"
 
-	"github.com/webview/webview"
+	"github.com/StevenZack/openurl"
+	"github.com/gofaith/webview"
 )
 
 type Window struct {
-	title         string
-	debug         bool
-	width, height int
-	hint          webview.Hint
-	w             webview.WebView
-	head          []Widget
-	body          []Widget
-	binders       []binder
+	title   string
+	debug   bool
+	server  *bridgeServer
+	head    []Widget
+	body    []Widget
+	binders []binder
 }
 
 var instance *Window
@@ -23,11 +22,7 @@ func NewWindow() *Window {
 	if instance != nil {
 		panic("You can only create one window")
 	}
-	instance = &Window{
-		width:  600,
-		height: 400,
-		hint:   webview.HintNone,
-	}
+	instance = &Window{}
 	return instance
 }
 
@@ -36,7 +31,7 @@ func (w *Window) Debug(debug bool) *Window {
 	return w
 }
 func (w *Window) IsRunning() bool {
-	return w.w != nil
+	return w.server != nil
 }
 func (w *Window) addBinder(key string, value interface{}) {
 	for i, v := range w.binders {
@@ -59,16 +54,13 @@ func (w *Window) Run() {
 	)
 
 	// webview
-	w.w = webview.New(w.debug)
-	w.w.SetSize(w.width, w.height, w.hint)
-	w.w.SetTitle(w.title)
 
 	//render
 	buf := new(strings.Builder)
 	buf.WriteString("<!DOCTYPE html>")
 	buf.WriteString(doc.Render())
 
-	w.w.SetHtml(buf.String())
+	openurl.OpenApp("data:text/html," + buf.String())
 
 	//bind
 	for _, v := range w.binders {
@@ -78,25 +70,8 @@ func (w *Window) Run() {
 		}
 	}
 
-	w.w.Run()
 }
 
-func (w *Window) Size(width, height int) *Window {
-	w.width = width
-	w.height = height
-	return w
-}
-
-func (w *Window) SizeMax() *Window {
-	w.hint = webview.HintMax
-	w.Size(0, 0)
-	return w
-}
-func (w *Window) SizeMin() *Window {
-	w.hint = webview.HintMin
-	w.Size(0, 0)
-	return w
-}
 func (w *Window) SizeFixed() *Window {
 	w.hint = webview.HintFixed
 	return w
